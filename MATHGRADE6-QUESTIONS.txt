@@ -1,0 +1,95 @@
+QUESTION 1A
+
+8.64 + 7.098 + 10.9901 = ?
+
+A. 15.5281
+B. 16.84701
+C. 26.7281
+D. 27.611
+
+---
+QUESTION 1B
+
+The change, in yards, in a football team’s position on the field for each of their last four plays is
+shown below.
+
+–4, 7, –7, 0
+
+Which list correctly compares the changes, in yards, in the football team’s position on the field?
+
+A. –7 < –4 < 0 < 7
+B. –4 < –7 < 0 < 7
+C. 0 < –7 < –4 < 7
+D. 0 < –4 < –7 < 7
+
+---
+QUESTION 1C
+
+Use the equation below to answer the question.
+
+6x + 3 = 3(2x + 3)
+
+Which statement correctly explains whether the equation is true or not?
+
+A. It is true because 6x equals 3 × 2x.
+B. It is not true because 3×3 does not equal 3.
+C. It is true because the terms on the left are multiples of 3.
+D. It is not true because all the x values should be on the same side of the equation
+
+---
+QUESTION 2A
+
+The table below shows the numbers of gallons of gasoline used and the miles driven for
+different types of cars.
+
+           Gasoline Used and Miles Driven
+
+| Type of Car | Gallons of Gasoline Used | Miles Driven |
+|-------------|--------------------------|--------------|
+|      A      |            5             |     106      |
+|      B      |           10             |     204      |
+|      C      |           15             |     298      |
+|      D      |           20             |     392      |
+
+Which type of car had the highest number of miles per gallon?
+
+A. type A
+B. type B
+C. type C
+D. type D
+
+---
+QUESTION 2B
+
+Use the inequality below to answer the question.
+
+0.08g + 0.2 < 5
+
+Which set of values contains possible solutions for g?
+
+A. {25, 40, 65}
+B. {29, 43, 59}
+C. {31, 47, 60}
+D. {44, 54, 64}
+
+---
+QUESTION 2C
+
+A movie theater is playing 3 movies. The length, in minutes, of each movie is shown in the
+table below.
+
+       Movie Lengths
+
+| Movie | Length (minutes) |
+|-------|------------------|
+|   1   |        87        |
+|   2   |       129        |
+|   3   |       102        |
+
+What is the mean length, in minutes, of the 3 movies playing at the theater?
+
+A. 15
+B. 42
+C. 102
+D. 106
+---
