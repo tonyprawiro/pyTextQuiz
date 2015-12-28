@@ -93,3 +93,4 @@ B. 42
 C. 102
 D. 106
 ---
+More information to be displayed during a session is here.

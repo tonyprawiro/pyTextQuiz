@@ -41,6 +41,7 @@ sCurrentQuestionNumber = ""
 sCurrentQuestionText = ""
 iCurrentQuestionLength = 0
 aQuestionShuffler = []
+sExtraInfo = ""
 with open(sQuizQuestionsFile) as fQuestions:
 	for line in fQuestions:
 		if line[:9] == "QUESTION ":
@@ -55,7 +56,9 @@ with open(sQuizQuestionsFile) as fQuestions:
 			sCurrentQuestionNumber = ""
 			sCurrentQuestionText = ""
 			iCurrentQuestionLength = 0
+			sExtraInfo = ""
 		else:
+			sExtraInfo += line
 			if iCurrentQuestionLength > iMaxQuestionLength:
 				print "ERROR: Question #%s is more than allowed limit of length (%d)" % (sCurrentQuestionNumber, iMaxQuestionLength)
 			else:
@@ -130,6 +133,10 @@ for iQIdx in range(iDesiredQuestions):
 	sQIdx = aQuestionShuffler[iQIdx]
 
 	os.system('clear')
+
+	print sExtraInfo
+	print "---"
+
 	if not bShowOriginalQuestionNumber:
 		print "Question %s of %d\n" % (iQIdx+1, iDesiredQuestions)
 	print aQuestions[sQIdx]
@@ -165,7 +172,7 @@ iTotalTime = time.time() - iStartTime
 iAverageTimePerQuestion = iTotalTime / iAnsweredQuestions
 fCorrectPercentage = iCorrect * 100 / iAnsweredQuestions 
 sResult = "fail"
-if fCorrectPercentage > iPassPercentage:
+if fCorrectPercentage >= iPassPercentage:
 	sResult = "pass"
 
 # Assessment
