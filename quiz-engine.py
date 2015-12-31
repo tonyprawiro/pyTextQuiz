@@ -2,8 +2,11 @@ import sys
 import os
 import random
 import time
+import re
+import pprint
 
 # Settings
+
 iPassPercentage = 70
 iMaxQuestionLength = 50
 iMaxQuestionDuration = 300
@@ -25,6 +28,21 @@ sQuizKeysFile = "%s-KEYS.txt" % (sQuizName)
 if not os.path.isfile(sQuizQuestionsFile) or not os.path.isfile(sQuizKeysFile):
 	print "Error: Make sure %s and %s files exist in the same directory" % (sQuizQuestionsFile, sQuizKeysFile)
 	sys.exit(1)
+
+# Check for existence of sets file
+
+aSets = {}
+aSetIndexes = {}
+sSetsFile = "%s-SETS.txt" % (sQuizName)
+i = 0
+if os.path.isfile(sSetsFile):
+	with open(sSetsFile) as fSets:
+		for line in fSets:
+			if "=" in line:
+				sSetName, sSetQuestions = line.strip().split('=')
+				i += 1
+				aSets[sSetName] = sSetQuestions
+				aSetIndexes[i] = sSetName
 
 # Parse keys
 
@@ -92,17 +110,39 @@ if len(aUnansweredFor) > 0:
 
 print "There are %d questions in pool" % (iTotalQuestions)
 
-iDesiredQuestions = 0
-while True:
-	sDesiredQuestions = raw_input("Enter the number of questions to answer (1-%s): " % (iTotalQuestions))
+sSetMode = "ALL"
+iTotalSets = len(aSets)
+if len(aSets) > 0:
+	print "Choose the questions set:"
+	for i in range(len(aSets)):
+		print "  [%d] for %s" % (i+1, aSetIndexes[i+1]) 
+	print "or just Enter for all questions"
+	sSetIndex = raw_input("> ")
+	iSetIndex = 0
 	try:
-		iDesiredQuestions = int(sDesiredQuestions)
+		iSetIndex = int(sSetIndex)
 	except:
 		pass
-	if iDesiredQuestions >= 1 and iDesiredQuestions <= iTotalQuestions:
-		break
-	else:
-		print "ERROR: Please enter a valid number"
+	if iSetIndex >= 1 and iSetIndex <= iTotalSets:
+		sSetMode = aSetIndexes[iSetIndex]
+
+if sSetMode == "ALL":
+	iDesiredQuestions = 0
+	while True:
+		sDesiredQuestions = raw_input("Enter the number of questions to answer (1-%s): " % (iTotalQuestions))
+		try:
+			iDesiredQuestions = int(sDesiredQuestions)
+		except:
+			pass
+		if iDesiredQuestions >= 1 and iDesiredQuestions <= iTotalQuestions:
+			break
+		else:
+			print "ERROR: Please enter a valid number"
+else:
+	aQuestionShuffler = aSets[sSetMode].split(",")
+	aQuestionShuffler = list(set(aQuestionShuffler))
+	iDesiredQuestions = len(aQuestionShuffler)
+	random.shuffle(aQuestionShuffler)
 
 iDurationPerQuestion = 120
 while True:
@@ -139,7 +179,26 @@ for iQIdx in range(iDesiredQuestions):
 
 	if not bShowOriginalQuestionNumber:
 		print "Question %s of %d\n" % (iQIdx+1, iDesiredQuestions)
-	print aQuestions[sQIdx]
+
+	# Get all options, assume it starts from A. B. C. and so on
+	aOptions = re.findall(r'\n[A-G]\. .*', aQuestions[sQIdx])
+	bMultipleOptions = False
+	if len(aOptions) > 0:
+		bMultipleOptions = True
+	aOptionsShuffler = []
+	for i in range(len(aOptions)):
+		aOptionsShuffler.append(i)
+	random.shuffle(aOptionsShuffler)
+
+	if bMultipleOptions:
+		# Print the question without the options because we will shuffle it
+		print re.sub(r'\n[A-G]\. .*', '', aQuestions[sQIdx])
+		# Print the shuffled options
+		for i in range(len(aOptionsShuffler)):
+			print '(%s) %s' % (chr(65+i), re.sub(r'\n[A-G]\. ', '', aOptions[aOptionsShuffler[i]]))
+	else:
+		print aQuestions[sQIdx]
+
 	print "\n"
 	print "Type your answer,"
 	print "   or :k if you don't know (counted as wrong answer)"
@@ -152,18 +211,30 @@ for iQIdx in range(iDesiredQuestions):
 			break
 
 	iAnsweredQuestions += 1
-	if sMyAns.upper() != ":K" and sMyAns.upper() != ":S" and sMyAns.upper() != ":Q":
+	if sMyAns[:1] == ":":
+
+		if sMyAns.upper() == ":Q":
+			bStop = True
+		else:
+			aMyAnswers[sQIdx] = sMyAns.upper()
+			aIncorrect.append(sQIdx)
+	else:
+
+		# Need to put back user's answer according to the options shuffler
+		if bMultipleOptions:
+			sTemp = sMyAns.upper()
+			sMyAns = ""
+			for c in sTemp:
+				iOrd = ord(c)-65
+				cActual = chr(aOptionsShuffler[iOrd]+65)
+				sMyAns = "%s%s" % (sMyAns, cActual)
+			sMyAns = ''.join(sorted(sMyAns))
+
 		aMyAnswers[sQIdx] = sMyAns.upper()
 		sCorrectAns = aKeys[sQIdx]
 		if sMyAns.strip().upper() == sCorrectAns.upper():
 			iCorrect += 1
 		else:
-			aIncorrect.append(sQIdx)
-	else:
-		if sMyAns.upper() == ":Q":
-			bStop = True
-		else:
-			aMyAnswers[sQIdx] = sMyAns.upper()
 			aIncorrect.append(sQIdx)
 
 # Assessment calculations
