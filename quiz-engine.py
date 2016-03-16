@@ -225,9 +225,12 @@ for iQIdx in range(iDesiredQuestions):
 			sTemp = sMyAns.upper()
 			sMyAns = ""
 			for c in sTemp:
-				iOrd = ord(c)-65
-				cActual = chr(aOptionsShuffler[iOrd]+65)
-				sMyAns = "%s%s" % (sMyAns, cActual)
+				if c >= 'A' and c < 'G':
+					iOrd = ord(c)-65
+					cActual = chr(aOptionsShuffler[iOrd]+65)
+					sMyAns = "%s%s" % (sMyAns, cActual)
+				else:
+					pass
 			sMyAns = ''.join(sorted(sMyAns))
 
 		aMyAnswers[sQIdx] = sMyAns.upper()
